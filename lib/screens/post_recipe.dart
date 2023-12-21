@@ -70,7 +70,7 @@ class _PostRecipeState extends State<PostRecipe> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 30, left: 30),
+                      padding: const EdgeInsets.only(top: 30, left: 30),
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Container(
@@ -159,7 +159,7 @@ class _PostRecipeState extends State<PostRecipe> {
                                 ElevatedButton(
                                   onPressed: _isLoading ? null : _handlePost,
                                   style: ButtonStyle(
-                                    minimumSize: MaterialStateProperty.all(Size.fromHeight(5)),
+                                    minimumSize: MaterialStateProperty.all(const Size.fromHeight(5)),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
                                             HexColor("#FF9E0C")),
@@ -222,7 +222,7 @@ class _PostRecipeState extends State<PostRecipe> {
       'descriptions': descriptions,
       'ingredients': ingredients,
       'instructions': instructions,
-      'category': category.join(" "),
+      'category': category.join(","),
       'image': base64Encode(compressedImage!)
     };
 

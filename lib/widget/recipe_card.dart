@@ -26,7 +26,7 @@ class _RecipeCardState extends State<RecipeCard> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: Image.memory(
-              base64Decode(widget.recipe['image'].toString().replaceAll('data:application/octet-stream;base64,', '')),
+              base64Decode(widget.recipe['image'].toString()),
               width: 300,
               height: 100,
               fit: BoxFit.fill,
@@ -43,7 +43,7 @@ class _RecipeCardState extends State<RecipeCard> {
                     fontSize: 14),
                 children: [
                   TextSpan(
-                      text: "\n${widget.recipe['category']}",
+                      text: "\n${widget.recipe['category'].join(',')}",
                       style: const TextStyle(fontWeight: FontWeight.normal),
                   ),
                 ]
@@ -54,14 +54,14 @@ class _RecipeCardState extends State<RecipeCard> {
             children: [
               const SizedBox(width: 15),
               Container(
-                constraints: const BoxConstraints(maxWidth: 60),
+                constraints: const BoxConstraints(maxWidth: 70),
                 padding: const EdgeInsets.fromLTRB(10,3,10,3),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: HexColor("#FF9E0C")
                 ),
                 child: Text(
-                    "⭐ ${widget.recipe['rating'] != 0 ? widget.recipe['rating'].toString() : '5.0'}",
+                    "⭐ ${widget.recipe['rating'] != 0 ? widget.recipe['rating'].toString() : 'New'}",
                     style: const TextStyle(
                       fontSize: 13,
                       color: Colors.white,
@@ -69,7 +69,7 @@ class _RecipeCardState extends State<RecipeCard> {
                     textAlign: TextAlign.start,
                 )
               ),
-              const SizedBox(width: 50),
+              const SizedBox(width: 40),
               Expanded(
                 flex: 2,
                 child: IconButton(

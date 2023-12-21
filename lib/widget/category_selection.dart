@@ -12,7 +12,7 @@ class CategorySelection extends StatefulWidget {
 }
 
 class _CategorySelectionState extends State<CategorySelection> {
-  final List<String> categories = ['Fast food', 'Dessert']; // Your categories
+  final List<String> categories = ['🍔 Fast food', '🍰 Desert', '🍝 Pasta', '🦞 Sea Food', '🌶️ Spicy', '🍹Beverage', '🥗 Vegetarian', '🐄 Dairy Free']; // Your categories
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,8 @@ class _CategorySelectionState extends State<CategorySelection> {
           child: Column(
           children: [
             const Text("Category", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            Row(
+            const SizedBox(height: 18),
+            Wrap(
               children: categories.map((category) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0),
@@ -39,7 +39,6 @@ class _CategorySelectionState extends State<CategorySelection> {
                 );
               }).toList(),
             ),
-            const Spacer(),
             Row(
               children: [
                 Expanded(
