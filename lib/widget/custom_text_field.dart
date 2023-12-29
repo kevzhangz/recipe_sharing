@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -34,18 +35,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
     if(widget.label == 'Email'){
       widget.keyboardType = TextInputType.emailAddress;
+    } else if(widget.maxLines != null){
+      widget.keyboardType = TextInputType.multiline;
     } else {
       widget.keyboardType = TextInputType.text;
     }
 
     return TextField(
       obscureText: widget.label == 'Password' ? _obscured : false,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: widget.keyboardType,
       focusNode: textFieldFocusNode,
       controller: widget.controller,
       minLines: widget.minLines,
       maxLines: widget.maxLines ?? 1,
-      maxLength: widget.maxLength,
+      inputFormatters: widget.maxLength != null ? [
+        WordLimitingTextInputFormatter(widget.maxLength),
+      ] : null,
       decoration: InputDecoration(
         prefixIcon: widget.icon != null ? Padding(
           padding: const EdgeInsets.all(10.0),
@@ -80,5 +85,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
         isDense: true,
       ),
     );
+  }
+}
+
+class WordLimitingTextInputFormatter extends TextInputFormatter {
+  final int _maxWords;
+
+  WordLimitingTextInputFormatter(this._maxWords);
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue, TextEditingValue newValue) {
+    int currentWords = newValue.text.split(' ').length;
+    print(currentWords);
+    if (currentWords > _maxWords) {
+      return oldValue;
+    }
+    return newValue;
   }
 }

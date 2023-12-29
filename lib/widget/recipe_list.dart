@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'recipe_card.dart';
 
 class RecipeList extends StatefulWidget {
-  RecipeList({super.key, this.recipes});
+  RecipeList({super.key, required this.recipes, required this.isLoading, this.count});
 
   dynamic recipes;
+  bool isLoading;
+  dynamic count;
 
   @override
   State<RecipeList> createState() => _RecipeListState();
@@ -15,8 +17,9 @@ class _RecipeListState extends State<RecipeList> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-        physics: const BouncingScrollPhysics(),
+    if(!widget.isLoading){
+      return GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisExtent: 200,
@@ -27,9 +30,27 @@ class _RecipeListState extends State<RecipeList> {
         itemBuilder: (context, index){
           return GestureDetector(
             child: RecipeCard(recipe: widget.recipes[index]),
-            onTap: () => Navigator.pushNamed(context, "/details")
+            onTap: () => Navigator.pushNamed(context, "/details", arguments: widget.recipes[index])
           );
         }
+      );
+    }
+
+    return GridView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisExtent: 200,
+      ),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: widget.count ?? 4,
+      itemBuilder: (context, index){
+        return GestureDetector(
+          child: const RecipeCardSkelton(),
+          onTap: () {}
+        );
+      }
     );
   }
 }

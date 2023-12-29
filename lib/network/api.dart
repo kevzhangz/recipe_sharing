@@ -37,7 +37,7 @@ class Network {
 
   getRecipeList({limit}) async {
     String query = '';
-    if(limit != 0){
+    if(limit != null){
       query = "?limit=$limit";
     }
 
@@ -46,7 +46,7 @@ class Network {
 
     return await http.get(
       fullUrl,
-      headers: _setHeaders(),
+      headers: _setHeaders(auth: true),
     );
   }
 
@@ -66,6 +66,25 @@ class Network {
 
     return await http.post(fullUrl,
       body: jsonEncode(data), 
+      headers: _setHeaders(auth: true)
+    );
+  }
+
+  rateRecipe(recipeId, data) async {
+    var fullUrl = Uri.parse('$_url/recipe/$recipeId/rate');
+    await _getToken();
+
+    return await http.post(fullUrl,
+      body: jsonEncode(data), 
+      headers: _setHeaders(auth: true)
+    );
+  }
+
+    saveRecipe(recipeId, data) async {
+    var fullUrl = Uri.parse('$_url/recipe/$recipeId/save');
+    await _getToken();
+
+    return await http.post(fullUrl,
       headers: _setHeaders(auth: true)
     );
   }

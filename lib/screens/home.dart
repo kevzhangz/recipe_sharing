@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:recipe_sharing/network/api.dart';
 import 'package:recipe_sharing/widget/recipe_list.dart';
+import 'package:recipe_sharing/widget/custom_search_bar.dart';
 
 
 class Home extends StatefulWidget {
@@ -17,10 +18,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   dynamic name;
   dynamic recipes;
-  int _selectedIndex = 0;
+  late bool loadRecipe;
 
   void initState() {
     super.initState();
+    loadRecipe = true;
     _loadUserData();
     _loadRecipe();
   }
@@ -36,12 +38,6 @@ class _HomeState extends State<Home> {
         name = user['name'].toString();
       });
     }
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 
   void _handleSearch(String input){
@@ -61,6 +57,7 @@ class _HomeState extends State<Home> {
     if(mounted){
       setState(() {
         recipes = body['result'];
+        loadRecipe = false;
       });
     }
   }
@@ -97,75 +94,12 @@ class _HomeState extends State<Home> {
                 )
               ),
               const SizedBox(height: 40),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 7,
-                    child: TextField(
-                      onChanged: _handleSearch,
-                      decoration: InputDecoration(
-                        hintText: "Search Recipes",
-                        prefixIcon: const Icon(Icons.search),
-                        prefixIconColor: Colors.black,
-                        isDense: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: HexColor("#FF9E0C"))
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  Container(
-                    height: 50.0,
-                    width: 50.0,
-                    decoration: BoxDecoration(
-                      color: HexColor("#FF9E0C"),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
-                      color: Colors.white,
-                      icon: const Icon(Icons.tune),
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
-              ),
-              RecipeList(recipes: recipes),
-              const SizedBox(height: 150),
-              ElevatedButton(
-                onPressed: logout,
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(HexColor("#FF9E0C")),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                ),
-                child: const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text('Logout', style: TextStyle(fontWeight: FontWeight.bold))
-                ),
-              ),
+              CustomSearchBar(),
+              RecipeList(recipes: recipes, isLoading: loadRecipe),
             ],
           ),
         ),
       )
     );
-  }
-
-  void logout() async {
-    var res = await Network().logout();
-    if (res.statusCode == 200) {
-      const storage = FlutterSecureStorage();
-      await storage.deleteAll();
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/login');
-      }
-    }
   }
 }

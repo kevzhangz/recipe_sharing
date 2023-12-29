@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:recipe_sharing/screens/post_recipe.dart';
+import 'package:recipe_sharing/screens/search.dart';
 import 'home.dart';
 import 'profile.dart';
 
@@ -13,16 +16,27 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  bool _isLocked = false;
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (!_isLocked) {
+      setState(() {
+        _selectedIndex = index;
+        _isLocked = true;
+      });
+
+      // Unlock after a certain duration (e.g., 2 seconds)
+      Timer(const Duration(milliseconds: 150), () {
+        setState(() {
+          _isLocked = false;
+        });
+      });
+    }
   }
 
   static const List<Widget> _widgetOptions = <Widget>[
     Home(),
-    Text("Search"),
+    Search(),
     PostRecipe(),
     Profile(),
   ];

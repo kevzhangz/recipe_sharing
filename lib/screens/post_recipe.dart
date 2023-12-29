@@ -69,25 +69,7 @@ class _PostRecipeState extends State<PostRecipe> {
               child: IntrinsicHeight(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30, left: 30),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Container(
-                          height: 40.0,
-                          width: 40.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.deepPurple.shade100
-                          ),
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back_outlined),
-                            onPressed: () {},
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 80),
                     InkWell(
                       onTap: _pickImage,
                       child: CircleAvatar(
@@ -217,13 +199,29 @@ class _PostRecipeState extends State<PostRecipe> {
       _isLoading = true;
     });
 
+    if(compressedImage == null){
+      if(mounted){
+        var snackBar = const SnackBar(
+          content: Text('Image must be added'),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        setState(() { 
+          _isLoading = false;
+        });
+      }
+
+      return;
+    }
+
     var data = {
       'title': title, 
       'descriptions': descriptions,
       'ingredients': ingredients,
       'instructions': instructions,
       'category': category.join(","),
-      'image': base64Encode(compressedImage!)
+      'image': base64Encode(compressedImage)
     };
 
     dynamic res = await Network().postRecipe(data);

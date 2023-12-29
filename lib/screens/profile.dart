@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import 'package:recipe_sharing/network/api.dart';
+import 'package:recipe_sharing/widget/custom_dialog.dart';
 import 'package:recipe_sharing/widget/recipe_list.dart';
-import 'package:recipe_sharing/widget/profile_button.dart';
+import 'package:recipe_sharing/widget/custom_radio_button.dart';
 
 
 class Profile extends StatefulWidget {
@@ -21,9 +23,11 @@ class _ProfileState extends State<Profile> {
   dynamic _selected = 'Created';
   dynamic recipes;
   dynamic _shownRecipe;
+  late bool loadRecipe;
 
   void initState() {
     super.initState();
+    loadRecipe = true;
     _loadUserData();
     _loadProfileRecipe();
   }
@@ -65,6 +69,7 @@ class _ProfileState extends State<Profile> {
       setState(() {
         recipes = body;
         _shownRecipe = recipes[_selected.toString().toLowerCase()];
+        loadRecipe = false;
       });
     }
   }
@@ -83,7 +88,7 @@ class _ProfileState extends State<Profile> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 38), 
+                      padding: const EdgeInsets.only(left: 38), 
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
@@ -115,7 +120,13 @@ class _ProfileState extends State<Profile> {
                     ),
                     child: IconButton(
                       icon: const Icon(Icons.settings_outlined),
-                      onPressed: () {},
+                      onPressed: () => showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        context: context, 
+                        builder: (context) => ProfileSetting()
+                      ),
                     ),
                   ),
                 ]
@@ -132,13 +143,15 @@ class _ProfileState extends State<Profile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("${recipes != null ? recipes['saved'].length : '...'}\n\nSaved", textAlign: TextAlign.center),
-                  SizedBox(width: 20),
-                  Text("${recipes != null ? recipes['created'].length : '...'}\n\nCreated", textAlign: TextAlign.center)
+                  const SizedBox(width: 4),
+                  Text("${recipes != null ? recipes['saved'].length : '...'}\n\nSaved", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w500)),
+                  const SizedBox(width: 27),
+                  Text("${recipes != null ? recipes['created'].length : '...'}\n\nCreated", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w500))
                 ],
               ),
               const SizedBox(height: 20),
-              Align(alignment: Alignment.center, 
+              Align(
+                alignment: Alignment.center, 
                 child: OutlinedButton(
                   onPressed: () {}, 
                   style: ButtonStyle(
@@ -162,18 +175,100 @@ class _ProfileState extends State<Profile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  PostButton(label: 'Saved', isSelected: _selected == 'Saved', onPressed: _onItemTapped),
+                  CustomRadioButton(label: 'Saved', isSelected: _selected == 'Saved', onPressed: _onItemTapped),
                   const SizedBox(width: 10),
-                  PostButton(label: 'Created', isSelected: _selected == 'Created', onPressed: _onItemTapped)
+                  CustomRadioButton(label: 'Created', isSelected: _selected == 'Created', onPressed: _onItemTapped)
                 ]
               ),
               const SizedBox(height: 30),
               Text("$_selected List", textAlign: TextAlign.start),
-              RecipeList(recipes: _shownRecipe),
+              RecipeList(recipes: _shownRecipe, isLoading: loadRecipe),
             ]
           )
         )
       )
     );
+  }
+}
+
+
+class ProfileSetting extends StatefulWidget {
+  ProfileSetting({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileSetting> createState() => _ProfileSettingState();
+}
+
+class _ProfileSettingState extends State<ProfileSetting> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      height: 230,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text("Profile", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
+            const SizedBox(height: 18),
+            TextButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => ConfirmDialog(onConfirm: logout),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child : Text("Edit Account Profile", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: HexColor("#242424")))
+              )
+            ),
+            TextButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => ConfirmDialog(onConfirm: logout),
+              ),
+              child: const Align(
+                alignment: Alignment.centerLeft,
+                child : Text("Log out", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: Colors.red))
+              )
+            ),
+            const Spacer(),
+            OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.white),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Close',
+                  style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void logout() async {
+    var res = await Network().logout();
+    if (res.statusCode == 200) {
+      const storage = FlutterSecureStorage();
+      await storage.deleteAll();
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+    }
   }
 }

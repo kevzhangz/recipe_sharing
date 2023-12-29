@@ -16,11 +16,15 @@ class _CategorySelectionState extends State<CategorySelection> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 270,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+      ),
+      height: 270,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
             const Text("Category", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 18),
@@ -31,7 +35,7 @@ class _CategorySelectionState extends State<CategorySelection> {
                   child: OutlinedButton(
                     onPressed: () => _toggleCategory(category),
                     style: ButtonStyle(
-                       backgroundColor:
+                        backgroundColor:
                           MaterialStateProperty.all<Color>(widget.selectedCategories.contains(category) ? HexColor("#FF9E0C") : Colors.white),
                     ),
                     child: Text(category, style: TextStyle(color: widget.selectedCategories.contains(category) ? Colors.white : Colors.black)),
@@ -84,7 +88,6 @@ class _CategorySelectionState extends State<CategorySelection> {
                 )
               ]
             )
-
           ]
         )
       )
@@ -116,14 +119,14 @@ class CategoryButton extends StatefulWidget {
 class _CategoryButtonState extends State<CategoryButton> {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Wrap(
       children: widget.selectedCategories.isNotEmpty ? List.generate(widget.selectedCategories.length, (index){
         return Padding(
           padding: EdgeInsets.only(right: 5),
           child: OutlinedButton(
             onPressed: () => showModalBottomSheet(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(20.0),
               ),
               context: context, 
               builder: (context) => CategorySelection(selectedCategories: widget.selectedCategories, onApply: widget.onApply)),
@@ -150,7 +153,7 @@ class _CategoryButtonState extends State<CategoryButton> {
         OutlinedButton(
           onPressed: () => showModalBottomSheet(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
             context: context, 
             builder: (context) => CategorySelection(selectedCategories: widget.selectedCategories, onApply: widget.onApply)),

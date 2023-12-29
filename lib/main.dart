@@ -5,6 +5,7 @@ import 'package:recipe_sharing/screens/login.dart';
 import 'package:recipe_sharing/screens/main_page.dart';
 import 'package:recipe_sharing/screens/signup.dart';
 import 'package:recipe_sharing/screens/page_not_found.dart';
+import 'package:recipe_sharing/widget/recipe_detail.dart';
 import 'package:recipe_sharing/widget/recipe_list.dart';
 
 void main() {
@@ -82,7 +83,7 @@ Route<dynamic> routeList(RouteSettings routeSettings) {
       break;
     case '/details':
       route = MaterialPageRoute(
-        builder: (context) => RecipeList(),
+        builder: (context) => RecipeDetail(recipe: args),
       );
       break;
     default:
