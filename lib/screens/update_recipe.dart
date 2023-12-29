@@ -10,23 +10,36 @@ import 'package:recipe_sharing/network/api.dart';
 import 'package:recipe_sharing/widget/category_selection.dart';
 import 'package:recipe_sharing/widget/custom_text_field.dart';
 
-class PostRecipe extends StatefulWidget {
-  const PostRecipe({super.key});
+class UpdateRecipe extends StatefulWidget {
+  UpdateRecipe({super.key, required this.recipe});
+
+  dynamic recipe;
 
   @override
-  State<PostRecipe> createState() => _PostRecipeState();
+  State<UpdateRecipe> createState() => _UpdateRecipeState();
 }
 
-class _PostRecipeState extends State<PostRecipe> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionsController = TextEditingController();
-  final TextEditingController _ingredientsController = TextEditingController();
-  final TextEditingController _instructionsController = TextEditingController();
+class _UpdateRecipeState extends State<UpdateRecipe> {
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionsController = TextEditingController();
+  TextEditingController _ingredientsController = TextEditingController();
+  TextEditingController _instructionsController = TextEditingController();
 
-  XFile? _imageFile;
+  dynamic _imageFile;
   bool _pickingImage = false;
   bool _isLoading = false;
   List _selectedCategories = [];
+
+  void initState(){
+    super.initState();
+
+    _titleController = TextEditingController(text: widget.recipe['title']);
+    _descriptionsController = TextEditingController(text: widget.recipe['descriptions']);
+    _ingredientsController = TextEditingController(text: widget.recipe['ingredients']);
+    _instructionsController = TextEditingController(text: widget.recipe['instructions']);
+    _selectedCategories = widget.recipe['category'];
+    _imageFile = base64Decode(widget.recipe['image']);
+  }
 
   Future<void> _pickImage() async {
     if(_pickingImage){
@@ -56,6 +69,13 @@ class _PostRecipeState extends State<PostRecipe> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    dynamic img;
+
+    if(_imageFile is XFile){
+      img = FileImage(File(_imageFile!.path));
+    } else {
+      img = MemoryImage(_imageFile);
+    }
 
     return Scaffold(
       backgroundColor: HexColor("#FF9E0C"),
@@ -69,7 +89,25 @@ class _PostRecipeState extends State<PostRecipe> {
               child: IntrinsicHeight(
                 child: Column(
                   children: [
-                    const SizedBox(height: 80),
+                    Align(
+                      alignment: Alignment.topLeft, 
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 40, left: 15),
+                        child: Container(
+                          height: 40.0,
+                          width: 40.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.deepPurple.shade100
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back_outlined),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     InkWell(
                       onTap: _pickImage,
                       child: CircleAvatar(
@@ -77,17 +115,8 @@ class _PostRecipeState extends State<PostRecipe> {
                         backgroundColor: Colors.white,
                         child: CircleAvatar(
                           radius: 110,
-                          backgroundColor: const Color.fromARGB(255, 119, 76, 11),
-                          backgroundImage: _imageFile != null
-                            ? FileImage(File(_imageFile!.path))
-                            : null,
-                          child: _imageFile == null
-                            ? Icon(
-                                Icons.camera_alt_outlined,
-                                size: 45,
-                                color: Colors.grey[400],
-                              )
-                            : null,
+                          foregroundColor: Colors.black.withOpacity(0.5),
+                          backgroundImage: img,
                         )
                       ),
                     ),
@@ -139,7 +168,7 @@ class _PostRecipeState extends State<PostRecipe> {
                                 CustomTextField(label: '400 Words Max', controller: _instructionsController, minLines: 1, maxLines: 20, maxLength: 400),
                                 const SizedBox(height: 20),
                                 ElevatedButton(
-                                  onPressed: _isLoading ? null : _handlePost,
+                                  onPressed: _isLoading ? null : _handleUpdate,
                                   style: ButtonStyle(
                                     minimumSize: MaterialStateProperty.all(const Size.fromHeight(5)),
                                     backgroundColor:
@@ -155,7 +184,7 @@ class _PostRecipeState extends State<PostRecipe> {
                                   child: const Padding(
                                     padding: EdgeInsets.all(16),
                                     child: Text(
-                                      'Post This',
+                                      'Update',
                                       style: TextStyle(fontWeight: FontWeight.bold)
                                     )
                                   ),
@@ -176,7 +205,7 @@ class _PostRecipeState extends State<PostRecipe> {
     );
   }
 
-  _handlePost() async {
+  _handleUpdate() async {
     Uint8List? originalImage;
     Uint8List? compressedImage;
 
@@ -185,9 +214,9 @@ class _PostRecipeState extends State<PostRecipe> {
     String ingredients = _ingredientsController.text;
     String instructions = _instructionsController.text;
     List category = _selectedCategories;
-    XFile? image = _imageFile;
+    dynamic image = _imageFile;
 
-    if(image != null){
+    if(image != null && image is XFile){
       originalImage = await image.readAsBytes();
       compressedImage = await FlutterImageCompress.compressWithList(
         originalImage,
@@ -199,7 +228,7 @@ class _PostRecipeState extends State<PostRecipe> {
       _isLoading = true;
     });
 
-    if(compressedImage == null){
+    if(image == null){
       if(mounted){
         var snackBar = const SnackBar(
           content: Text('Image must be added'),
@@ -221,10 +250,13 @@ class _PostRecipeState extends State<PostRecipe> {
       'ingredients': ingredients,
       'instructions': instructions,
       'category': category.join(","),
-      'image': base64Encode(compressedImage)
     };
 
-    dynamic res = await Network().postRecipe(data);
+    if(compressedImage != null){
+      data['image'] = base64Encode(compressedImage);
+    }
+
+    dynamic res = await Network().updateRecipe(widget.recipe['recipe_id'], data);
     dynamic body = jsonDecode(res.body);
 
     if (res.statusCode == 200) {

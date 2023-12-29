@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_sharing/network/api.dart';
 import 'package:recipe_sharing/widget/recipe_list.dart';
@@ -12,7 +13,7 @@ class Search extends StatefulWidget {
   State<Search> createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin<Search> {
   dynamic recipes;
   late bool loadRecipe = true;
 
@@ -34,21 +35,45 @@ class _SearchState extends State<Search> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 50, 30, 16),
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
-              CustomSearchBar(),
-              RecipeList(recipes: recipes, isLoading: loadRecipe, count: 6),
-            ]
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          const SliverAppBar(
+            collapsedHeight: 10,
+            toolbarHeight: 10,
+            backgroundColor: Colors.white,
+          ),
+          CupertinoSliverRefreshControl(
+            onRefresh: refreshData,
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 50, 30, 16),
+              child: Column(
+                children: [
+                  CustomSearchBar(),
+                  RecipeList(recipes: recipes, isLoading: loadRecipe, count: 6),
+                ]
+              )
+            ),
           )
-        )
+        ]
       )
     );
+  }
+
+  Future refreshData() async {
+    setState(() {
+      loadRecipe = true;
+    });
+    _loadRecipe();
+    await Future.delayed(const Duration(milliseconds: 1500));
   }
 }

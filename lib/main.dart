@@ -5,8 +5,9 @@ import 'package:recipe_sharing/screens/login.dart';
 import 'package:recipe_sharing/screens/main_page.dart';
 import 'package:recipe_sharing/screens/signup.dart';
 import 'package:recipe_sharing/screens/page_not_found.dart';
-import 'package:recipe_sharing/widget/recipe_detail.dart';
-import 'package:recipe_sharing/widget/recipe_list.dart';
+import 'package:recipe_sharing/screens/recipe_detail.dart';
+import 'package:recipe_sharing/screens/update_profile.dart';
+import 'package:recipe_sharing/screens/update_recipe.dart';
 
 void main() {
   runApp(const MyApp());
@@ -84,6 +85,16 @@ Route<dynamic> routeList(RouteSettings routeSettings) {
     case '/details':
       route = MaterialPageRoute(
         builder: (context) => RecipeDetail(recipe: args),
+      );
+      break;
+    case '/update_recipe':
+      route = MaterialPageRoute(
+        builder: (context) => UpdateRecipe(recipe: args),
+      );
+      break;
+    case '/update_profile':
+      route = MaterialPageRoute(
+        builder: (context) => const UpdateProfile(),
       );
       break;
     default:

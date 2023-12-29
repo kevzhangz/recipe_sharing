@@ -18,6 +18,20 @@ class RecipeDetail extends StatefulWidget {
 class _RecipeDetailState extends State<RecipeDetail> {
   String _selected = 'Descriptions';
   String? _shownInfo;
+  String? rating;
+  bool? isSaved;
+
+  @override
+  void initState() {
+    super.initState();
+    rating = widget.recipe['rating'].toString();
+    isSaved = widget.recipe['isSaved'];
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
   
   _onItemTapped(type) {
     if(mounted){
@@ -75,7 +89,13 @@ class _RecipeDetailState extends State<RecipeDetail> {
                             ),
                             child: IconButton(
                               icon: const Icon(Icons.settings_outlined),
-                              onPressed: () => Navigator.pop(context),
+                              onPressed: () => showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                context: context, 
+                                builder: (context) => RecipeSetting(recipe: widget.recipe),
+                              )
                             ),
                           ),
                         ) 
@@ -105,12 +125,24 @@ class _RecipeDetailState extends State<RecipeDetail> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SizedBox(height: 25),
-                                Text(
-                                  widget.recipe['title'], 
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24)
+                                const SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        widget.recipe['title'], 
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24)
+                                      )
+                                    ),
+                                    IconButton(
+                                      onPressed: _handleSave,
+                                      iconSize: 32,
+                                      icon: isSaved == true ? const Icon(Icons.star) : const Icon(Icons.star_outline),
+                                      color: HexColor("#FF9E0C")
+                                    )
+                                  ],
                                 ),
                                 const SizedBox(height: 3),
                                 Text(
@@ -118,7 +150,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                 ),
                                 const SizedBox(height: 15),
                                 Text(
-                                  "⭐ ${widget.recipe['rating'] != 0 ? widget.recipe['rating'].toString() : 'Unrated'}"
+                                  "⭐ ${rating != '0' ? rating : 'Unrated'}"
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
@@ -192,10 +224,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
     );
   }
 
-  _handleRating(rating) async {
+  _handleRating(rate) async {
     Navigator.pop(context);
     var data = {
-      'rating': rating,
+      'rating': rate,
     };
 
     var snackBar = const SnackBar(
@@ -206,13 +238,134 @@ class _RecipeDetailState extends State<RecipeDetail> {
     dynamic body = jsonDecode(res.body);
 
     if (res.statusCode == 200) {
-      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      if (context.mounted) {
+        setState(() {
+          rating = body['rating'].toString();
+        });
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     } else if (body['error'] != null) {
       if (mounted) {
         var snackBar = SnackBar(
           content: Text(body['error']),
         );
 
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
+  }
+
+    _handleSave() async {
+    dynamic res = await Network().saveRecipe(widget.recipe['recipe_id']);
+    dynamic body = jsonDecode(res.body);
+
+    if (res.statusCode == 200) {
+      if (mounted) {
+        setState(() {
+          isSaved = !isSaved!;
+        });
+
+        String action = 'Saved';
+        if(isSaved == false){
+          action = 'Unsaved';
+        }
+
+        var snackBar = SnackBar(
+          content: Text('Recipe $action'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } else if (body['error'] != null) {
+      if (mounted) {
+        var snackBar = SnackBar(
+          content: Text(body['error']),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
+  }
+}
+
+class RecipeSetting extends StatefulWidget {
+  RecipeSetting({Key? key, required this.recipe}) : super(key: key);
+
+  dynamic recipe;
+
+  @override
+  State<RecipeSetting> createState() => _RecipeSettingState();
+}
+
+class _RecipeSettingState extends State<RecipeSetting> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      height: 230,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text("Recipe Settings", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
+            const SizedBox(height: 18),
+            TextButton(
+              onPressed: () => Navigator.pushNamed(context, '/update_recipe', arguments: widget.recipe),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child : Text("Update Recipe", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: HexColor("#242424")))
+              )
+            ),
+            TextButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => ConfirmDialog(onConfirm: deleteRecipe),
+              ),
+              child: const Align(
+                alignment: Alignment.centerLeft,
+                child : Text("Remove Recipe", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: Colors.red))
+              )
+            ),
+            const Spacer(),
+            OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.white),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Close',
+                  style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void deleteRecipe() async {
+    var res = await Network().deleteRecipe(widget.recipe['recipe_id']);
+    var body = jsonDecode(res.body);
+
+    if (res.statusCode == 200) {
+      if(mounted){
+        Navigator.pushReplacementNamed(context, '/home');
+
+        var snackBar = SnackBar(
+          content: Text(body['messages']),
+        );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }

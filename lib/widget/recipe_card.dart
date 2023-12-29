@@ -56,7 +56,7 @@ class _RecipeCardState extends State<RecipeCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 8),
+                padding: const EdgeInsets.only(left: 8, bottom: 10),
                 child: Container(
                   constraints: const BoxConstraints(maxWidth: 90),
                   padding: const EdgeInsets.fromLTRB(10,3,10,3),
@@ -74,10 +74,12 @@ class _RecipeCardState extends State<RecipeCard> {
                   )
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: widget.recipe['isSaved'] != null && widget.recipe['isSaved'] == true ? Icon(Icons.star) : Icon(Icons.star_outline),
-                color: HexColor("#FF9E0C")
+              Padding(
+                padding: const EdgeInsets.only(right: 8, bottom: 10),
+                child: Icon(
+                  widget.recipe['isSaved'] != null && widget.recipe['isSaved'] == true ? Icons.star : Icons.star_outline,
+                  color: HexColor("#FF9E0C")
+                )
               )
             ],
           )

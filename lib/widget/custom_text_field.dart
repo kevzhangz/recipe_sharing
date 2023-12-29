@@ -97,7 +97,6 @@ class WordLimitingTextInputFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue, TextEditingValue newValue) {
     int currentWords = newValue.text.split(' ').length;
-    print(currentWords);
     if (currentWords > _maxWords) {
       return oldValue;
     }

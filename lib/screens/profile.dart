@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -17,8 +18,9 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Profile> {
   dynamic name;
+  dynamic profile;
   dynamic image;
   dynamic _selected = 'Created';
   dynamic recipes;
@@ -41,6 +43,7 @@ class _ProfileState extends State<Profile> {
 
       setState(() {
         name = user['name'].toString();
+        profile = user['profile'];
       });
     }
   }
@@ -75,119 +78,154 @@ class _ProfileState extends State<Profile> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    print('abc');
+    super.build(context);
+    dynamic img;
+
+    if(profile != null){
+      img = MemoryImage(base64Decode(profile));
+    } else {
+      img = NetworkImage('https://ui-avatars.com/api/?name=${name}&background=random&length=1');
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 50, 30, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 38), 
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          text: "Hello, ",
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          const SliverAppBar(
+            collapsedHeight: 20,
+            toolbarHeight: 20,
+            backgroundColor: Colors.white,
+          ),
+          CupertinoSliverRefreshControl(
+            onRefresh: refreshData,
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 38), 
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: "Hello, ",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                              ),
+                              children: [
+                                TextSpan(
+                                    text: "$name\n",
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                    text: "This is your ${_selected.toString().toLowerCase()} list",
+                                    style: const TextStyle(fontSize: 14)
+                                ),
+                              ]
+                            )
                           ),
-                          children: [
-                            TextSpan(
-                                text: "$name\n",
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                                text: "This is your ${_selected.toString().toLowerCase()} list",
-                                style: const TextStyle(fontSize: 14)
-                            ),
-                          ]
                         )
                       ),
-                    )
-                  ),
-                  Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.deepPurple.shade100
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.settings_outlined),
-                      onPressed: () => showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
+                      Container(
+                        height: 40.0,
+                        width: 40.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.deepPurple.shade100
                         ),
-                        context: context, 
-                        builder: (context) => ProfileSetting()
+                        child: IconButton(
+                          icon: const Icon(Icons.settings_outlined),
+                          onPressed: () => showModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            context: context, 
+                            builder: (context) => ProfileSetting()
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  const SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 80, // Image radius
+                      backgroundImage: img,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 4),
+                      Text("${recipes != null ? recipes['saved'].length : '...'}\n\nSaved", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w500)),
+                      const SizedBox(width: 27),
+                      Text("${recipes != null ? recipes['created'].length : '...'}\n\nCreated", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w500))
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.center, 
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pushNamed(context, '/update_profile'), 
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        child: Text(
+                          "Edit Profile",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
+                        )
                       ),
                     ),
                   ),
-                ]
-              ),
-              const SizedBox(height: 30),
-              Align(
-                alignment: Alignment.center,
-                child: CircleAvatar(
-                  radius: 48, // Image radius
-                  backgroundImage: NetworkImage(image ?? 'https://ui-avatars.com/api/?name=${name}&background=random&length=1'),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 4),
-                  Text("${recipes != null ? recipes['saved'].length : '...'}\n\nSaved", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w500)),
-                  const SizedBox(width: 27),
-                  Text("${recipes != null ? recipes['created'].length : '...'}\n\nCreated", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w500))
-                ],
-              ),
-              const SizedBox(height: 20),
-              Align(
-                alignment: Alignment.center, 
-                child: OutlinedButton(
-                  onPressed: () {}, 
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
+                  const SizedBox(height: 3),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomRadioButton(label: 'Saved', isSelected: _selected == 'Saved', onPressed: _onItemTapped),
+                      const SizedBox(width: 10),
+                      CustomRadioButton(label: 'Created', isSelected: _selected == 'Created', onPressed: _onItemTapped)
+                    ]
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: Text(
-                      "Edit Profile",
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
-                    )
-                  ),
-                ),
-              ),
-              const SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomRadioButton(label: 'Saved', isSelected: _selected == 'Saved', onPressed: _onItemTapped),
-                  const SizedBox(width: 10),
-                  CustomRadioButton(label: 'Created', isSelected: _selected == 'Created', onPressed: _onItemTapped)
+                  const SizedBox(height: 30),
+                  Text("$_selected List", textAlign: TextAlign.start),
+                  RecipeList(recipes: _shownRecipe, isLoading: loadRecipe),
                 ]
-              ),
-              const SizedBox(height: 30),
-              Text("$_selected List", textAlign: TextAlign.start),
-              RecipeList(recipes: _shownRecipe, isLoading: loadRecipe),
-            ]
+              )
+            )
           )
-        )
+        ]
       )
     );
+  }
+
+  Future refreshData() async {
+    setState(() {
+      loadRecipe = true;
+    });
+    _loadUserData();
+    _loadProfileRecipe();
+    await Future.delayed(const Duration(milliseconds: 1500));
   }
 }
 
@@ -216,10 +254,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
             const Text("Profile", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
             const SizedBox(height: 18),
             TextButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (BuildContext context) => ConfirmDialog(onConfirm: logout),
-              ),
+              onPressed: () => Navigator.pushNamed(context, '/update_profile'),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child : Text("Edit Account Profile", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: HexColor("#242424")))

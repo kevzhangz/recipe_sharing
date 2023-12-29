@@ -23,8 +23,8 @@ class _RatingDialogState extends State<RatingDialog> {
   Widget _buildStar(int starCount) {
     return InkWell(
       child: Icon(
-        Icons.star,
-        color: _stars >= starCount ? Colors.orange : Colors.grey,
+        _stars >= starCount ? Icons.star : Icons.star_outline,
+        color: Colors.orange
       ),
       onTap: () {
         setState(() {

@@ -19,7 +19,7 @@ class _RecipeListState extends State<RecipeList> {
   Widget build(BuildContext context) {
     if(!widget.isLoading){
       return GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisExtent: 200,
@@ -37,7 +37,7 @@ class _RecipeListState extends State<RecipeList> {
     }
 
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisExtent: 200,

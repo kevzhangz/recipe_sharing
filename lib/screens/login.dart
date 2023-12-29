@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 30, top: 10),
+                      padding: const EdgeInsets.only(right: 30, top: 25),
                       child: Image.asset("assets/images/chef.png", height: 300, width: 300),
                     ),
                     Expanded(
@@ -82,12 +82,14 @@ class _LoginPageState extends State<LoginPage> {
                                 CustomTextField(
                                     icon: 'assets/images/mail.png',
                                     label: 'Email',
-                                    controller: _emailController),
+                                    controller: _emailController
+                                ),
                                 const SizedBox(height: 16),
                                 CustomTextField(
                                     icon: 'assets/images/password.png',
                                     label: 'Password',
-                                    controller: _passwordController),
+                                    controller: _passwordController
+                                ),
                                 const SizedBox(height: 32),
                                 ElevatedButton(
                                   onPressed: _isLoading ? null : _login,

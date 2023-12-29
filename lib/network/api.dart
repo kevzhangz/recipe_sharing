@@ -35,6 +35,16 @@ class Network {
     );
   }
 
+  updateProfile(email, data) async {
+    var fullUrl = Uri.parse('$_url/users/$email');
+    await _getToken();
+
+    return await http.put(fullUrl,
+      body: jsonEncode(data),
+      headers: _setHeaders(auth: true)
+    );
+  }
+
   getRecipeList({limit}) async {
     String query = '';
     if(limit != null){
@@ -70,6 +80,25 @@ class Network {
     );
   }
 
+  updateRecipe(recipe_id, data) async {
+    var fullUrl = Uri.parse('$_url/recipe/$recipe_id');
+    await _getToken();
+
+    return await http.put(fullUrl,
+      body: jsonEncode(data),
+      headers: _setHeaders(auth: true)
+    );
+  }
+
+  deleteRecipe(recipe_id) async {
+    var fullUrl = Uri.parse('$_url/recipe/$recipe_id');
+    await _getToken();
+
+    return await http.delete(fullUrl,
+      headers: _setHeaders(auth: true)
+    );
+  }
+
   rateRecipe(recipeId, data) async {
     var fullUrl = Uri.parse('$_url/recipe/$recipeId/rate');
     await _getToken();
@@ -80,7 +109,7 @@ class Network {
     );
   }
 
-    saveRecipe(recipeId, data) async {
+  saveRecipe(recipeId) async {
     var fullUrl = Uri.parse('$_url/recipe/$recipeId/save');
     await _getToken();
 

@@ -15,6 +15,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final PageController _pageController = PageController();
   int _selectedIndex = 0;
   bool _isLocked = false;
 
@@ -24,6 +25,8 @@ class _MainPageState extends State<MainPage> {
         _selectedIndex = index;
         _isLocked = true;
       });
+
+      _pageController.jumpToPage(index);
 
       // Unlock after a certain duration (e.g., 2 seconds)
       Timer(const Duration(milliseconds: 150), () {
@@ -50,7 +53,11 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: _pageController,
+        children: _widgetOptions,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
