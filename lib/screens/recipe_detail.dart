@@ -140,7 +140,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                     IconButton(
                                       onPressed: _handleSave,
                                       iconSize: 32,
-                                      icon: isSaved == true ? const Icon(Icons.star) : const Icon(Icons.star_outline),
+                                      icon: isSaved == true ? SvgPicture.asset('assets/images/svg/star filled.svg', height: 18, width: 18) : SvgPicture.asset('assets/images/svg/star.svg', height: 18, width: 18),
                                       color: HexColor("#FF9E0C")
                                     )
                                   ],
