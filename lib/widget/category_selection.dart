@@ -21,12 +21,12 @@ class _CategorySelectionState extends State<CategorySelection> {
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20))
       ),
-      height: 270,
+      height: 290,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const Text("Category", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const Text("Category", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
             const SizedBox(height: 18),
             Wrap(
               children: categories.map((category) {
@@ -38,11 +38,12 @@ class _CategorySelectionState extends State<CategorySelection> {
                         backgroundColor:
                           MaterialStateProperty.all<Color>(widget.selectedCategories.contains(category) ? HexColor("#FF9E0C") : Colors.white),
                     ),
-                    child: Text(category, style: TextStyle(color: widget.selectedCategories.contains(category) ? Colors.white : Colors.black)),
+                    child: Text(category, style: TextStyle(color: widget.selectedCategories.contains(category) ? Colors.white : Color(0xFF242424))),
                   ),
                 );
               }).toList(),
             ),
+            const Spacer(),
             Row(
               children: [
                 Expanded(
@@ -62,7 +63,7 @@ class _CategorySelectionState extends State<CategorySelection> {
                       padding: EdgeInsets.all(8),
                       child: Text(
                         'Apply',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)
+                        style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)
                       )
                     ),
                   ), 
@@ -82,7 +83,7 @@ class _CategorySelectionState extends State<CategorySelection> {
                     padding: EdgeInsets.all(3),
                     child: Text(
                       "Cancel",
-                      style: TextStyle(fontWeight: FontWeight.bold, color:Colors.black)
+                      style: TextStyle(fontWeight: FontWeight.w600, color:Color(0xFF242424))
                     )
                   ),
                 )
@@ -143,7 +144,7 @@ class _CategoryButtonState extends State<CategoryButton> {
               padding: const EdgeInsets.all(3),
               child: Text(
                 widget.selectedCategories[index],
-                style: const TextStyle(fontWeight: FontWeight.bold, color:Colors.black)
+                style: const TextStyle(fontWeight: FontWeight.w600, color:Color(0xFF242424))
               )
             ),
           )
@@ -170,7 +171,7 @@ class _CategoryButtonState extends State<CategoryButton> {
             padding: EdgeInsets.all(3),
             child: Text(
               "Pick a category",
-              style: TextStyle(fontWeight: FontWeight.bold, color:Colors.black)
+              style: TextStyle(fontWeight: FontWeight.w600, color:Color(0xFF242424))
             )
           ),
         ),

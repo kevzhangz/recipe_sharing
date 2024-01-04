@@ -101,7 +101,7 @@ class _UpdateRecipeState extends State<UpdateRecipe> {
                             color: Colors.deepPurple.shade100
                           ),
                           child: IconButton(
-                            icon: const Icon(Icons.arrow_back_outlined),
+                            icon: const Icon(Icons.keyboard_arrow_left),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ),
@@ -115,7 +115,7 @@ class _UpdateRecipeState extends State<UpdateRecipe> {
                         backgroundColor: Colors.white,
                         child: CircleAvatar(
                           radius: 110,
-                          foregroundColor: Colors.black.withOpacity(0.5),
+                          foregroundColor: Color(0xFF242424).withOpacity(0.5),
                           backgroundImage: img,
                         )
                       ),
@@ -135,7 +135,7 @@ class _UpdateRecipeState extends State<UpdateRecipe> {
                                 const SizedBox(height: 5),
                                 const Text('Title', 
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 24)
                                 ),
                                 const SizedBox(height: 10),
@@ -145,7 +145,7 @@ class _UpdateRecipeState extends State<UpdateRecipe> {
                                 const SizedBox(height: 30),
                                 const Text('Description', 
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 24)
                                 ),
                                 const SizedBox(height: 10),
@@ -153,7 +153,7 @@ class _UpdateRecipeState extends State<UpdateRecipe> {
                                 const SizedBox(height: 20),
                                 const Text('Ingredients', 
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 24)
                                 ),
                                 const SizedBox(height: 10),
@@ -161,7 +161,7 @@ class _UpdateRecipeState extends State<UpdateRecipe> {
                                 const SizedBox(height: 20),
                                 const Text('Instructions',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 24)
                                 ),
                                 const SizedBox(height: 10),
@@ -185,7 +185,7 @@ class _UpdateRecipeState extends State<UpdateRecipe> {
                                     padding: EdgeInsets.all(16),
                                     child: Text(
                                       'Update',
-                                      style: TextStyle(fontWeight: FontWeight.bold)
+                                      style: TextStyle(fontWeight: FontWeight.w600)
                                     )
                                   ),
                                 ),

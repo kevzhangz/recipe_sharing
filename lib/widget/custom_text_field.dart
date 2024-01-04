@@ -53,11 +53,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ] : null,
       decoration: InputDecoration(
         prefixIcon: widget.icon != null ? Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(13.0),
           child: Image.asset(
             widget.icon,
-            width: 20,
-            height: 20,
+            width: 18,
+            height: 18,
             fit: BoxFit.fill,
           ),
         ) : null,
@@ -77,6 +77,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ) : const Text(""),
         labelText: widget.label,
         border: OutlineInputBorder(
+          borderSide: const BorderSide(width: 1, color: Color(0xFFE7E5FA)),
           borderRadius: BorderRadius.circular(6.0),
         ),
         focusedBorder: OutlineInputBorder(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class RatingDialog extends StatefulWidget {
@@ -21,16 +22,16 @@ class _RatingDialogState extends State<RatingDialog> {
   }
 
   Widget _buildStar(int starCount) {
-    return InkWell(
-      child: Icon(
-        _stars >= starCount ? Icons.star : Icons.star_outline,
-        color: Colors.orange
+    return Padding(
+      padding: starCount >= 5 ? const EdgeInsets.all(0) : const EdgeInsets.only(right: 6),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            _stars = starCount;
+          });
+        },
+        child: _stars >= starCount ? SvgPicture.asset('assets/images/svg/star filled.svg', height: 18, width: 18) : SvgPicture.asset('assets/images/svg/star.svg', height: 18, width: 18),
       ),
-      onTap: () {
-        setState(() {
-          _stars = starCount;
-        });
-      },
     );
   }
 
@@ -43,7 +44,7 @@ class _RatingDialogState extends State<RatingDialog> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Text("Rate This Recipe", style:TextStyle(fontSize: 20)),
+            const Text("Rate This Recipe", style:TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
             const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -72,13 +73,13 @@ class _RatingDialogState extends State<RatingDialog> {
                     style: OutlinedButton.styleFrom(
                       backgroundColor: HexColor("#FF9E0C")
                     ),
-                    child: const Text("Apply", style: TextStyle(color: Colors.white))
+                    child: const Text("Apply", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))
                   ),
                 ),
                 const SizedBox(width: 5),
                 OutlinedButton(
                   onPressed: () => Navigator.of(context).pop(), 
-                  child: const Text("Close", style: TextStyle(color: Colors.black))
+                  child: const Text("Close", style: TextStyle(color: Color(0xFF242424), fontWeight: FontWeight.w600))
                 ),
                 const SizedBox(width: 20)
               ]
@@ -111,7 +112,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
         child: Column(
           children: [
             const SizedBox(height: 30),
-            Text(widget.label ?? "Are You Sure ?", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+            Text(widget.label ?? "Are You Sure ?", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
             const Spacer(),
             Row(
               children: [
@@ -122,13 +123,13 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
                     style: OutlinedButton.styleFrom(
                       backgroundColor: HexColor("#FF9E0C")
                     ),
-                    child: const Text("Yes", style: TextStyle(color: Colors.white))
+                    child: const Text("Yes", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))
                   ),
                 ),
                 const SizedBox(width: 10),
                 OutlinedButton(
                   onPressed: () => Navigator.of(context).pop(), 
-                  child: const Text("Cancel", style: TextStyle(color: Colors.black))
+                  child: const Text("Cancel", style: TextStyle(color: Color(0xFF242424), fontWeight: FontWeight.w600))
                 ),
                 const SizedBox(width: 20)
               ]

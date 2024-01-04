@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -82,10 +83,10 @@ class _PostRecipeState extends State<PostRecipe> {
                             ? FileImage(File(_imageFile!.path))
                             : null,
                           child: _imageFile == null
-                            ? Icon(
-                                Icons.camera_alt_outlined,
-                                size: 45,
-                                color: Colors.grey[400],
+                            ? SvgPicture.asset(
+                                'assets/images/svg/camera.svg',
+                                width: 45,
+                                height: 45,
                               )
                             : null,
                         )
@@ -106,7 +107,7 @@ class _PostRecipeState extends State<PostRecipe> {
                                 const SizedBox(height: 5),
                                 const Text('Title', 
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 24)
                                 ),
                                 const SizedBox(height: 10),
@@ -116,7 +117,7 @@ class _PostRecipeState extends State<PostRecipe> {
                                 const SizedBox(height: 30),
                                 const Text('Description', 
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 24)
                                 ),
                                 const SizedBox(height: 10),
@@ -124,7 +125,7 @@ class _PostRecipeState extends State<PostRecipe> {
                                 const SizedBox(height: 20),
                                 const Text('Ingredients', 
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 24)
                                 ),
                                 const SizedBox(height: 10),
@@ -132,7 +133,7 @@ class _PostRecipeState extends State<PostRecipe> {
                                 const SizedBox(height: 20),
                                 const Text('Instructions',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 24)
                                 ),
                                 const SizedBox(height: 10),
@@ -156,7 +157,7 @@ class _PostRecipeState extends State<PostRecipe> {
                                     padding: EdgeInsets.all(16),
                                     child: Text(
                                       'Post This',
-                                      style: TextStyle(fontWeight: FontWeight.bold)
+                                      style: TextStyle(fontWeight: FontWeight.w600)
                                     )
                                   ),
                                 ),

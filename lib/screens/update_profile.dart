@@ -39,8 +39,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
     if (userString != null) {
       var user = jsonDecode(userString);
 
-      print(user['profile']);
-
       setState(() {
         name = user['name'];
         _nameController = TextEditingController(text: user['name'].toString());
@@ -100,7 +98,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       color: Colors.deepPurple.shade100
                     ),
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_outlined),
+                      icon: const Icon(Icons.keyboard_arrow_left),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
@@ -109,7 +107,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     text: const TextSpan(
                       text: "Edit Profile ",
                       style: TextStyle(
-                        color: Colors.black,
+                        fontFamily: 'Poppins',
+                        color: Color(0xFF242424),
                         fontSize: 20,
                       ),
                     )
@@ -154,7 +153,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         padding: const EdgeInsets.all(8),
                         child: Text(
                           _isLoading ? 'Processing...' : 'Apply Changes',
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)
+                          style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.white)
                         )
                       ),
                     ), 
@@ -174,7 +173,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       padding: EdgeInsets.all(3),
                       child: Text(
                         "Cancel",
-                        style: TextStyle(fontWeight: FontWeight.bold, color:Colors.black)
+                        style: TextStyle(fontWeight: FontWeight.w600, color:Color(0xFF242424))
                       )
                     ),
                   )

@@ -19,12 +19,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: const CheckAuth(),
-        onGenerateRoute: routeList,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: HexColor("#FF9E0C"),
-        ));
+      home: const CheckAuth(),
+      onGenerateRoute: routeList,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: HexColor("#FF9E0C"),
+        fontFamily: 'Poppins',
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontWeight: FontWeight.w300, color: Color(0xFF242424)),
+          bodyMedium: TextStyle(fontWeight: FontWeight.w300, color: Color(0xFF242424)),
+          bodySmall: TextStyle(fontWeight: FontWeight.w300, color: Color(0xFF242424)),
+          labelSmall: TextStyle(fontWeight: FontWeight.w300, color: Color(0xFF242424)),
+          labelMedium: TextStyle(fontWeight: FontWeight.w300, color: Color(0xFF242424)),
+          labelLarge: TextStyle(fontWeight: FontWeight.w300, color: Color(0xFF242424)),
+        ),
+      )
+    );
   }
 }
 

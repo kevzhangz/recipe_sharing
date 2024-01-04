@@ -80,7 +80,7 @@ class _MainPageState extends State<MainPage> {
 
     return IconButton(
       onPressed: () => _onItemTapped(index),
-      icon: SvgPicture.asset("assets/images/navigation/$iconName $active.svg", height: 18, width: 18)
+      icon: SvgPicture.asset("assets/images/svg/$iconName $active.svg", height: 18, width: 18)
     );
   }
 }

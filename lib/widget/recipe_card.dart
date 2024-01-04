@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class RecipeCard extends StatefulWidget {
@@ -17,21 +18,27 @@ class _RecipeCardState extends State<RecipeCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+    return Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(width: 1, color: Color(0xFFE7E5FA)),
+          borderRadius: BorderRadius.circular(20),
+        )
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: Image.memory(
-              base64Decode(widget.recipe['image'].toString()),
-              width: 300,
-              height: 100,
-              fit: BoxFit.fill,
-            )
+          Padding(
+            padding: const EdgeInsets.all(0.5),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image.memory(
+                base64Decode(widget.recipe['image'].toString()),
+                width: 160,
+                height: 144,
+                fit: BoxFit.cover,
+              )
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8, top: 10),
@@ -39,9 +46,11 @@ class _RecipeCardState extends State<RecipeCard> {
               text: TextSpan(
                 text: widget.recipe['title'].length > maxTitleLength ? "${widget.recipe['title'].substring(0, maxTitleLength)}..." : widget.recipe['title'],
                 style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14),
+                  fontFamily: 'Poppins',
+                  color: Color(0xFF242424),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14
+                ),
                 children: [
                   TextSpan(
                       text: "\n${widget.recipe['category'][0]}",
@@ -58,8 +67,8 @@ class _RecipeCardState extends State<RecipeCard> {
               Padding(
                 padding: const EdgeInsets.only(left: 8, bottom: 10),
                 child: Container(
-                  constraints: const BoxConstraints(maxWidth: 90),
-                  padding: const EdgeInsets.fromLTRB(10,3,10,3),
+                  constraints: const BoxConstraints(maxWidth: 100),
+                  padding: const EdgeInsets.fromLTRB(10,1.5,10,1.5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: HexColor("#FF9E0C")
@@ -76,10 +85,7 @@ class _RecipeCardState extends State<RecipeCard> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8, bottom: 10),
-                child: Icon(
-                  widget.recipe['isSaved'] != null && widget.recipe['isSaved'] == true ? Icons.star : Icons.star_outline,
-                  color: HexColor("#FF9E0C")
-                )
+                child: widget.recipe['isSaved'] != null && widget.recipe['isSaved'] == true ? SvgPicture.asset('assets/images/svg/star filled.svg', height: 16, width: 16) : SvgPicture.asset('assets/images/svg/star.svg', height: 16, width: 16),
               )
             ],
           )
@@ -101,7 +107,7 @@ class Skeleton extends StatelessWidget {
       width: width,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.04),
+        color: Color(0xFF242424).withOpacity(0.04),
         borderRadius: const BorderRadius.all(Radius.circular(16))
       ),
     );
@@ -118,7 +124,7 @@ class RecipeCardSkelton extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Skeleton(width: 160, height: 100),
+        Skeleton(width: 160, height: 144),
         SizedBox(height: 10),
         Skeleton(width: 130, height: 15),
         SizedBox(height: 5),

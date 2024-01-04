@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:recipe_sharing/helpers/helpers.dart';
 import 'package:recipe_sharing/widget/category_selection.dart';
@@ -45,8 +46,13 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             onChanged: _handleSearch,
             decoration: InputDecoration(
               hintText: "Search Recipes",
-              prefixIcon: const Icon(Icons.search),
-              prefixIconColor: Colors.black,
+              prefixIcon: Padding(
+                padding: const EdgeInsets.all(13.0),
+                child: SvgPicture.asset(
+                  'assets/images/svg/search dark.svg', width: 18, height: 18, fit: BoxFit.fill
+                ),
+              ),
+              prefixIconColor: const Color(0xFF242424),
               isDense: true,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -63,11 +69,12 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           width: 50.0,
           decoration: BoxDecoration(
             color: HexColor("#FF9E0C"),
+            border: Border.all(color: const Color(0xFFE7E5FA)),
             borderRadius: BorderRadius.circular(10),
           ),
           child: IconButton(
             color: Colors.white,
-            icon: const Icon(Icons.tune),
+            icon: SvgPicture.asset('assets/images/svg/filter.svg', width: 18, height: 18),
             onPressed: () => showModalBottomSheet(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),

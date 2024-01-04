@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:recipe_sharing/network/api.dart';
 import 'package:recipe_sharing/widget/custom_dialog.dart';
@@ -72,7 +73,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                               color: Colors.deepPurple.shade100
                             ),
                             child: IconButton(
-                              icon: const Icon(Icons.arrow_back_outlined),
+                              icon: const Icon(Icons.keyboard_arrow_left),
                               onPressed: () => Navigator.pop(context),
                             ),
                           ),
@@ -88,7 +89,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                               color: Colors.deepPurple.shade100
                             ),
                             child: IconButton(
-                              icon: const Icon(Icons.settings_outlined),
+                              icon: SvgPicture.asset('assets/images/svg/settings.svg', height: 18, width: 18),
                               onPressed: () => showModalBottomSheet(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0),
@@ -132,7 +133,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                       child: Text(
                                         widget.recipe['title'], 
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w600,
                                           fontSize: 24)
                                       )
                                     ),
@@ -171,7 +172,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                 Text(
                                   _selected,
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 20
                                   )
                                 ),
@@ -204,7 +205,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                     padding: EdgeInsets.all(16),
                                     child: Text(
                                       'Rate This',
-                                      style: TextStyle(fontWeight: FontWeight.bold)
+                                      style: TextStyle(fontWeight: FontWeight.w600)
                                     )
                                   ),
                                 ),
@@ -345,7 +346,7 @@ class _RecipeSettingState extends State<RecipeSetting> {
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Close',
-                  style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black),
+                  style: TextStyle(fontWeight: FontWeight.w500, color: Color(0xFF242424)),
                 ),
               ),
             ),

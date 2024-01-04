@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import 'package:recipe_sharing/network/api.dart';
@@ -120,13 +121,14 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                             text: TextSpan(
                               text: "Hello, ",
                               style: const TextStyle(
-                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF242424),
                                   fontSize: 20,
                               ),
                               children: [
                                 TextSpan(
                                     text: "$name\n",
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(
                                     text: "This is your ${_selected.toString().toLowerCase()} list",
@@ -145,7 +147,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                           color: Colors.deepPurple.shade100
                         ),
                         child: IconButton(
-                          icon: const Icon(Icons.settings_outlined),
+                          icon: SvgPicture.asset('assets/images/svg/settings.svg', height: 18, width: 18),
                           onPressed: () => showModalBottomSheet(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0),
@@ -170,9 +172,9 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(width: 4),
-                      Text("${recipes != null ? recipes['saved'].length : '...'}\n\nSaved", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text("${recipes != null ? recipes['saved'].length : '...'}\nSaved", textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600)),
                       const SizedBox(width: 27),
-                      Text("${recipes != null ? recipes['created'].length : '...'}\n\nCreated", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w500))
+                      Text("${recipes != null ? recipes['created'].length : '...'}\nCreated", textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600))
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -189,10 +191,10 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                         ),
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                         child: Text(
                           "Edit Profile",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)
+                          style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF242424))
                         )
                       ),
                     ),
@@ -250,13 +252,13 @@ class _ProfileSettingState extends State<ProfileSetting> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text("Profile", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
+            const Text("Profile", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
             const SizedBox(height: 18),
             TextButton(
               onPressed: () => Navigator.pushNamed(context, '/update_profile'),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child : Text("Edit Account Profile", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: HexColor("#242424")))
+                child : Text("Edit Account Profile", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: HexColor("#242424"), fontWeight: FontWeight.w600))
               )
             ),
             TextButton(
@@ -266,7 +268,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
               ),
               child: const Align(
                 alignment: Alignment.centerLeft,
-                child : Text("Log out", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: Colors.red))
+                child : Text("Log out", textAlign: TextAlign.left, style: TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.w600))
               )
             ),
             const Spacer(),
@@ -285,7 +287,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Close',
-                  style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF242424)),
                 ),
               ),
             ),

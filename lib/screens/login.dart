@@ -56,25 +56,27 @@ class _LoginPageState extends State<LoginPage> {
                                 const Text('Login',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w600,
                                         fontSize: 24)),
                                 const SizedBox(height: 20),
                                 RichText(
                                   text: const TextSpan(
                                     text: 'Enter your ',
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14),
+                                      color: Color(0xFF242424),
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins'
+                                    ),
                                     children: [
                                       TextSpan(
                                           text: 'Email ',
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.w600)),
                                       TextSpan(text: 'and '),
                                       TextSpan(
                                           text: 'Password',
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.w600)),
                                     ]
                                   )
                                 ),
@@ -91,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                                     controller: _passwordController
                                 ),
                                 const SizedBox(height: 32),
-                                ElevatedButton(
+                                OutlinedButton(
                                   onPressed: _isLoading ? null : _login,
                                   style: ButtonStyle(
                                     backgroundColor:
@@ -110,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                                       _isLoading
                                           ? 'Processing...'
                                           : 'Login',
-                                      style: const TextStyle(fontWeight: FontWeight.bold)
+                                      style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.white)
                                     )
                                   ),
                                 ),
@@ -120,8 +122,10 @@ class _LoginPageState extends State<LoginPage> {
                                   text: TextSpan(
                                     text: "Don't have an account? ",
                                     style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14),
+                                      color: Color(0xFF242424),
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins'
+                                    ),
                                     children: [
                                       TextSpan(
                                           text: 'Sign up',

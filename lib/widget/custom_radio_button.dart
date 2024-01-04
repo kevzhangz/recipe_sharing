@@ -25,7 +25,7 @@ class _CustomRadioButtonState extends State<CustomRadioButton> {
         padding: const EdgeInsets.all(4),
         child: Text(
           widget.label,
-          style: TextStyle(fontWeight: FontWeight.bold, color: widget.isSelected ? Colors.white : Colors.black)
+          style: TextStyle(fontWeight: FontWeight.w600, color: widget.isSelected ? Colors.white : const Color(0xFF242424))
         )
       )
     );

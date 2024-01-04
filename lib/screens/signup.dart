@@ -34,22 +34,22 @@ class _SignUpPageState extends State<SignUpPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset('assets/images/lock.jpg',
-                  height: 170, width: 170, alignment: Alignment.center
+                  height: 180, width: 180, alignment: Alignment.center
               ),
               const SizedBox(height: 50),
               const Text('Sign Up',
                   textAlign: TextAlign.start,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)
               ),
               const SizedBox(height: 10),
               RichText(
                 text: const TextSpan(
                   text: 'Enter your ',
-                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  style: TextStyle(color: Color(0xFF242424), fontSize: 14, fontFamily: 'Poppins'),
                   children: [
                     TextSpan(
                         text: 'Credentials',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: TextStyle(fontWeight: FontWeight.w600)),
                     TextSpan(text: ' in the forms below'),
                   ]
                 )
@@ -70,7 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   label: 'Password',
                   controller: _passwordController),
               const SizedBox(height: 32.0),
-              ElevatedButton(
+              OutlinedButton(
                 onPressed: _isLoading ? null : _register,
                 style: ButtonStyle(
                   backgroundColor:
@@ -83,7 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(_isLoading ? 'Processing...' : 'Sign Up', style: const TextStyle(fontWeight: FontWeight.bold))
+                  child: Text(_isLoading ? 'Processing...' : 'Sign Up', style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.white))
                 ),
               ),
               const SizedBox(height: 10),
@@ -91,11 +91,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   text: 'Already have an account? ',
-                  style: const TextStyle(color: Colors.black, fontSize: 14),
+                  style: const TextStyle(color: Color(0xFF242424), fontSize: 14, fontFamily: 'Poppins'),
                   children: [
                     TextSpan(
                       text: 'Log In',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => Navigator.pushReplacementNamed(context, '/login')
                     ),

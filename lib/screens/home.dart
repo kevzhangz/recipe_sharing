@@ -94,9 +94,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                     text: TextSpan(
                       text: "Practices Recipes,\neasier at ",
                       style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24),
+                        fontFamily: 'Poppins',
+                        color: Color(0xFF242424),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24
+                      ),
                       children: [
                         TextSpan(
                             text: "home 👨‍🍳",

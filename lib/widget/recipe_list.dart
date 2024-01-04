@@ -22,7 +22,9 @@ class _RecipeListState extends State<RecipeList> {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisExtent: 200,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          mainAxisExtent: 245,
         ),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -40,7 +42,9 @@ class _RecipeListState extends State<RecipeList> {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisExtent: 200,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        mainAxisExtent: 245,
       ),
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
