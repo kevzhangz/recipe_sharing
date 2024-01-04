@@ -45,7 +45,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
         name = user['name'];
         _nameController = TextEditingController(text: user['name'].toString());
         email = user['email'];
-        _imageFile = base64Decode(user['profile']);
+        if(user['profile'] != null){
+          _imageFile = base64Decode(user['profile']);
+        }
       });
     }
   }
@@ -132,7 +134,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               TextField(
                 controller: _nameController,
               ),
-              const SizedBox(height: 400),
+              const SizedBox(height: 360),
               Row(
                 children: [
                   Expanded(

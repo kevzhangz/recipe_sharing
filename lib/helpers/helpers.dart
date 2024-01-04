@@ -1,15 +1,23 @@
-import 'dart:convert';
+import 'dart:async';
 
-import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 
-apiCall(link, body) async {
-  var url = Uri.parse(link);
-  var response = await http.post(url, 
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(body)
-  );
+class Debouncer {
+  final int milliseconds;
+  Timer? _timer;
 
-  return jsonDecode(response.body);
+  Debouncer({required this.milliseconds});
+
+  void run(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+
+  void cancel() {
+    _timer?.cancel();
+  }
+
+  void dispose() {
+    _timer?.cancel();
+  }
 }

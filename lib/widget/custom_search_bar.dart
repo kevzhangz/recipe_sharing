@@ -1,17 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:recipe_sharing/helpers/helpers.dart';
+import 'package:recipe_sharing/widget/category_selection.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  CustomSearchBar({super.key, this.handleSearch, this.handleFilter});
+  CustomSearchBar({super.key, this.search});
 
-  dynamic handleSearch;
-  dynamic handleFilter;
+  dynamic search;
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
+  dynamic query = '';
+  List selectedCategories = [];
+  final _debouncer = Debouncer(milliseconds: 1000);
+
+  void _handleSearch(String input) async {
+    setState(() {
+      query = input;
+    });
+    if(input.length >= 3){
+      _debouncer.run(() => widget.search(search: query, filter: selectedCategories.join(',')));
+    }
+  }
+
+  void _handleFilter(categories) async {
+    setState(() {
+      selectedCategories = categories;
+    });
+    widget.search(search: query, filter: selectedCategories.join(','));
+
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -19,7 +42,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         Expanded(
           flex: 7,
           child: TextField(
-            onChanged: widget.handleSearch,
+            onChanged: _handleSearch,
             decoration: InputDecoration(
               hintText: "Search Recipes",
               prefixIcon: const Icon(Icons.search),
@@ -45,7 +68,13 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           child: IconButton(
             color: Colors.white,
             icon: const Icon(Icons.tune),
-            onPressed: widget.handleFilter,
+            onPressed: () => showModalBottomSheet(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              context: context, 
+              builder: (context) => CategorySelection(selectedCategories: selectedCategories, onApply: _handleFilter)
+            ),
           ),
         ),
       ],

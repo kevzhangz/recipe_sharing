@@ -17,10 +17,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
-  dynamic name;
-  dynamic recipes;
+  dynamic name, recipes;
   late bool loadRecipe;
 
+  @override
   void initState() {
     super.initState();
     loadRecipe = true;
@@ -41,19 +41,14 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
     }
   }
 
-  void _handleSearch(String input){
-    // _results.clear();
-    // for (var str in myCoolStrings){
-    //   if(str.toLowerCase().contains(input.toLowerCase())){
-    //     setState(() {
-    //       _results.add(str);
-    //     });
-    //   }
-    // }
-  }
+  void _loadRecipe({search, filter}) async {
+    if(!loadRecipe){
+      setState(() {
+        loadRecipe = true;
+      });
+    }
 
-  void _loadRecipe() async {
-    var res = await Network().getRecipeList(limit: 4);
+    var res = await Network().getRecipeList(limit: 4, search: search ?? '', filter: filter ?? '');
     var body = jsonDecode(res.body);
     if(mounted){
       setState(() {
@@ -111,7 +106,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                     )
                   ),
                   const SizedBox(height: 40),
-                  CustomSearchBar(),
+                  CustomSearchBar(search: _loadRecipe),
                   RecipeList(recipes: recipes, isLoading: loadRecipe),
                 ]
               )
@@ -123,9 +118,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
   }
 
   Future refreshData() async {
-    setState(() {
-      loadRecipe = true;
-    });
     _loadRecipe();
     await Future.delayed(const Duration(milliseconds: 1500));
   }

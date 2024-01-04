@@ -129,7 +129,8 @@ class _CategoryButtonState extends State<CategoryButton> {
                 borderRadius: BorderRadius.circular(20.0),
               ),
               context: context, 
-              builder: (context) => CategorySelection(selectedCategories: widget.selectedCategories, onApply: widget.onApply)),
+              builder: (context) => CategorySelection(selectedCategories: widget.selectedCategories, onApply: widget.onApply)
+            ),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
               shape: MaterialStateProperty.all(

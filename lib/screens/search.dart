@@ -23,8 +23,14 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin<Sear
     _loadRecipe();
   }
 
-  void _loadRecipe() async {
-    var res = await Network().getRecipeList();
+  void _loadRecipe({search, filter}) async {
+    if(!loadRecipe){
+      setState(() {
+        loadRecipe = true;
+      });
+    }
+
+    var res = await Network().getRecipeList(search: search ?? '', filter: filter ?? '');
     var body = jsonDecode(res.body);
     if(mounted){
       setState(() {
@@ -58,7 +64,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin<Sear
               padding: const EdgeInsets.fromLTRB(30, 50, 30, 16),
               child: Column(
                 children: [
-                  CustomSearchBar(),
+                  CustomSearchBar(search: _loadRecipe),
                   RecipeList(recipes: recipes, isLoading: loadRecipe, count: 6),
                 ]
               )

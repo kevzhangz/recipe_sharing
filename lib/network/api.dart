@@ -45,11 +45,14 @@ class Network {
     );
   }
 
-  getRecipeList({limit}) async {
+  getRecipeList({limit, search, filter}) async {
     String query = '';
     if(limit != null){
       query = "?limit=$limit";
     }
+
+    query += query.length > 1 ? "&" : "?";
+    query += "search=$search&filter=$filter";
 
     var fullUrl = Uri.parse('$_url/recipe$query');
     await _getToken();

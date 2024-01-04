@@ -82,7 +82,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
   @override
   Widget build(BuildContext context) {
-    print('abc');
     super.build(context);
     dynamic img;
 
