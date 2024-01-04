@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:recipe_sharing/screens/post_recipe.dart';
 import 'package:recipe_sharing/screens/search.dart';
@@ -58,32 +59,28 @@ class _MainPageState extends State<MainPage> {
         controller: _pageController,
         children: _widgetOptions,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outlined),
-            label: '',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: HexColor("#FF9E0C"),
-        onTap: _onItemTapped,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const SizedBox(width: 32),
+            _buildIconButton('home', 0),
+            _buildIconButton('search', 1),
+            _buildIconButton('create', 2),
+            _buildIconButton('profile', 3),
+            const SizedBox(width: 32)
+          ],
+        ),
       )
+    );
+  }
+
+  IconButton _buildIconButton(String iconName, int index) {
+    String active = _selectedIndex == index ? 'orange' : 'dark';
+
+    return IconButton(
+      onPressed: () => _onItemTapped(index),
+      icon: SvgPicture.asset("assets/images/navigation/$iconName $active.svg", height: 18, width: 18)
     );
   }
 }

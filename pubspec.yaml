@@ -36,6 +36,7 @@ dependencies:
   flutter_secure_storage: 9.0.0
   image_picker: 1.0.5
   flutter_image_compress: 2.1.0
+  flutter_svg: 2.0.9
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -57,6 +58,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - "assets/images/navigation/"
     - "assets/images/"
   fonts:
     - family: Poppins
