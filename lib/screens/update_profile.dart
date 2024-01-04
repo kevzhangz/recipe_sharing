@@ -220,8 +220,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
       await storage.write(key: 'user', value: json.encode(body));
 
       if (context.mounted){
-        Navigator.pop(context);
-        Navigator.pop(context);
+        Navigator.of(context).popUntil((route) => route.isFirst);
       } 
     } else if (body['error'] != null) {
       if (mounted) {
