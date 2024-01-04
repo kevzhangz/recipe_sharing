@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:recipe_sharing/screens/intro.dart';
 import 'package:recipe_sharing/screens/login.dart';
 import 'package:recipe_sharing/screens/main_page.dart';
 import 'package:recipe_sharing/screens/signup.dart';
@@ -10,6 +14,8 @@ import 'package:recipe_sharing/screens/update_profile.dart';
 import 'package:recipe_sharing/screens/update_recipe.dart';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const MyApp());
 }
 
@@ -55,10 +61,11 @@ class _CheckAuthState extends State<CheckAuth> {
       builder: (BuildContext context, AsyncSnapshot prefs) {
         switch (prefs.connectionState) {
           case ConnectionState.done:
+            FlutterNativeSplash.remove();
             if (prefs.data != null) {
               return const MainPage();
             } else {
-              return const LoginPage();
+              return const IntroScreen();
             }
           default:
             return const Scaffold(
