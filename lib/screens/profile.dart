@@ -303,6 +303,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
       const storage = FlutterSecureStorage();
       await storage.deleteAll();
       if (mounted) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
         Navigator.pushReplacementNamed(context, '/login');
       }
     }
